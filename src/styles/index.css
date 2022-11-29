@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Emilys+Candy&display=swap');
+
+:root {
+  --brand-color: #6f5ca3;
+  --background: #f4eded;
+  -text: #171d1c;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+h1 {
+  font-family: 'Emilys Candy', cursive;
+}

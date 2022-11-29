@@ -8,5 +8,14 @@
  * @type {import('gatsby').GatsbyConfig}
  */
 module.exports = {
-  plugins: [],
+  plugins: [
+    {
+      resolve: 'gatsby-plugin-manifest',
+      options: {
+        icon: 'src/images/C.png',
+      },
+    },
+    `gatsby-plugin-react-helmet`,
+    `gatsby-plugin-emotion`,
+  ],
 }
