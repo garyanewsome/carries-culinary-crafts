@@ -37,7 +37,10 @@ const A = styled.a`
 export const Home = () => {
   return (
     <Container>
-      <Helmet title="Carrie's Culinary Crafts" defer={false} />
+      <Helmet title="Carrie's Culinary Crafts" defer={false}>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9765379677122167"
+          crossorigin="anonymous"></script>
+      </Helmet>
       <Heading>Carrie's Culinary Crafts</Heading>
       <p>Visit us on</p>
       <A href="https://www.youtube.com/@CarriesCulinaryCrafts">
