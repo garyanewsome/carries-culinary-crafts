@@ -1,53 +1,89 @@
-import * as React from 'react'
-import { Helmet } from 'react-helmet'
-import styled from '@emotion/styled'
+import * as React from "react"
+import { Link, graphql } from "gatsby"
 
-import { YouTube } from '../icons/youtube'
-import '../styles/index.css'
+import Bio from "../components/bio"
+import Layout from "../components/layout"
+import Seo from "../components/seo"
 
-const Container = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  font-size: 1.5rem;
-  background-color: var(--background);
-  color: var(--text);
-`
+const BlogIndex = ({ data, location }) => {
+  const siteTitle = data.site.siteMetadata?.title || `Title`
+  const posts = data.allMarkdownRemark.nodes
 
-const Heading = styled.h1`
-  margin-bottom: 16px;
-  padding: 8px 16px;
-  text-align: center;
-  letter-spacing: 0.25rem;
-  background-color: var(--brand-color);
-  color: var(--background);
-`
+  if (posts.length === 0) {
+    return (
+      <Layout location={location} title={siteTitle}>
+        <Seo title="All posts" />
+        <Bio />
+        <p>
+          No blog posts found. Add markdown posts to "content/blog" (or the
+          directory you specified for the "gatsby-source-filesystem" plugin in
+          gatsby-config.js).
+        </p>
+      </Layout>
+    )
+  }
 
-const A = styled.a`
-  margin: 8px;
-  text-align: center;
-  font-size: 2rem;
-  color: #129490;
-`
-
-export const Home = () => {
   return (
-    <Container>
-      <Helmet title="Carrie's Culinary Crafts" defer={false}>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9765379677122167"
-          crossorigin="anonymous"></script>
-      </Helmet>
-      <Heading>Carrie's Culinary Crafts</Heading>
-      <p>Visit us on</p>
-      <A href="https://www.youtube.com/@CarriesCulinaryCrafts">
-        <YouTube />
-      </A>
-    </Container>
+    <Layout location={location} title={siteTitle}>
+      <Seo title="All posts" />
+      <Bio />
+      <ol style={{ listStyle: `none` }}>
+        {posts.map(post => {
+          const title = post.frontmatter.title || post.fields.slug
+
+          return (
+            <li key={post.fields.slug}>
+              <article
+                className="post-list-item"
+                itemScope
+                itemType="http://schema.org/Article"
+              >
+                <header>
+                  <h2>
+                    <Link to={post.fields.slug} itemProp="url">
+                      <span itemProp="headline">{title}</span>
+                    </Link>
+                  </h2>
+                  <small>{post.frontmatter.date}</small>
+                </header>
+                <section>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: post.frontmatter.description || post.excerpt,
+                    }}
+                    itemProp="description"
+                  />
+                </section>
+              </article>
+            </li>
+          )
+        })}
+      </ol>
+    </Layout>
   )
 }
 
-export default Home
+export default BlogIndex
+
+export const pageQuery = graphql`
+  query {
+    site {
+      siteMetadata {
+        title
+      }
+    }
+    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
+      nodes {
+        excerpt
+        fields {
+          slug
+        }
+        frontmatter {
+          date(formatString: "MMMM DD, YYYY")
+          title
+          description
+        }
+      }
+    }
+  }
+`
